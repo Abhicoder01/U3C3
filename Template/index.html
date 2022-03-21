@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #main{
+        display: grid;
+        grid-template-columns: repeat(4,22%);
+        grid-gap: 3%;
+    
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+      <h3 id="wallet">
+        <!--SHOW CURRENT WALLET VALUE HERE, ONLY THE NUMBER SHOULD BE VISIBLE-->
+      </h3>
+    </div>
+
+    <div id="main">
+      <!--SHOW ALL THE VOUCEHRS DATA FROM API HERE( IMAGE, NAME AND PRICE)-->
+    </div>
+  </body>
+</html>
+
+<script type="module">
+  //WRITE YOUR LOGIC HERE
+  var amount=localStorage.getItem("wallet")
+  console.log(amount)
+  let walletamount=document.getElementById("wallet")
+
+walletamount.textContent=amount
+if(walletamount.innerText==""){
+  walletamount.innerText=0
+}
+  async function data(){
+    let x=await fetch(`https://masai-vouchers-api.herokuapp.com/api/vouchers`)
+    let res=await x.json()
+    let data=res[0].vouchers
+    console.log(data)
+    apend(data)
+  }
+  data()
+
+  function apend(data){
+  
+    data.forEach((elem)=>{
+    var div=document.createElement("div")
+    var image=document.createElement("img")
+    image.src=elem.image
+    var name=document.createElement("p")
+    name.textContent=elem.name 
+    var price=document.createElement("p")
+    price.textContent=elem.price
+    
+    var button=document.createElement("button")
+    button.id="buy"
+    button.addEventListener("click",function(){
+      cart(elem)
+      
+    })
+    button.textContent="Buy"
+    div.append(image,name,price,button)
+    document.querySelector("#main").append(div)
+    
+    
+});
+  }
+
+  //adding element to local storage for appending in purchases.html
+  var arr=[]
+
+  function cart(elem){
+  walletamount.innerText=amount-elem.price
+    amount=amount-elem.price
+    if(amount<0){
+      walletamount.innerText=0
+
+    }
+    if(walletamount.innerText<1){
+      alert("Insufficient balance")
+    }
+    else{
+    arr.push(elem)
+    console.log(arr)
+    localStorage.setItem("purchases",JSON.stringify(arr))
+    }
+  }
+</script>

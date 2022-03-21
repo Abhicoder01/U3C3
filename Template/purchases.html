@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+
+  <body>
+    <div id="purchases">
+      <!--SHOW ALL YOUR PURCHASES HERE-->
+    </div>
+  </body>
+</html>
+
+<script>
+  //WRITE YOUR LOGIC HERE
+  var cartdata=JSON.parse(localStorage.getItem("purchases"))
+  console.log(cartdata)
+  apend(cartdata)
+   function apend(cartdata){
+    cartdata.forEach((elem)=>{
+    var div=document.createElement("div")
+    var image=document.createElement("img")
+    image.src=elem.image
+    var name=document.createElement("p")
+    name.textContent=elem.name 
+    var price=document.createElement("p")
+    price.textContent=elem.price
+    div.append(image,name,price)
+    document.querySelector("#purchases").append(div)
+    
+});
+   }
+</script>
